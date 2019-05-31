@@ -20,6 +20,20 @@ service: testing-one # NOTE: update this with your service name
 provider:
   name: aws
   runtime: nodejs8.10
+  apiKeys:
+    - myClientOne
+    - myClientTwo
+    - value: myClientThirdValueOfMinLength20
+      description: This is explicitly provided api key
+    - ${self:provider.stage}-myClientFive
+  usagePlan:
+    quota:
+      limit: 5000
+      offset: 2
+      period: MONTH
+    throttle:
+      burstLimit: 200
+      rateLimit: 100
 
 # you can overwrite defaults here
 #  stage: dev
@@ -61,6 +75,7 @@ functions:
       - http:
           path: hello
           method: get
+          private: true
 
   # POST endpoint
   submitForm:
@@ -69,6 +84,7 @@ functions:
       - http:
           path: submitForm
           method: post
+          private: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
